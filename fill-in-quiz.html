@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fill-in Quiz: 3 JavaScript Functions</title>
+<!-- Full Bootstrap 5 (loads when you host this file yourself, e.g. Netlify). A small Bootstrap-style fallback is inlined below. -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+<style>
+:root{--bg:#fff7d1;--card:#fff;--text:#2b2500;--muted:#6b6320;--gold:#d4a017;--gold-d:#a67c00;--ok:#1e7a3c;--okbg:#e3f6e8;--bad:#b3261e;--badbg:#fde8e6;--code:#1f1f1f;--codetxt:#f5f5f5;--line:#e6d9a0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1a0d;--card:#2a2612;--text:#f4edc4;--muted:#c9bd7a;--line:#4a4320;--okbg:#17321f;--badbg:#3b1b18;--ok:#6fd48c;--bad:#ff8a80}}
+:root[data-theme="dark"]{--bg:#1c1a0d;--card:#2a2612;--text:#f4edc4;--muted:#c9bd7a;--line:#4a4320;--okbg:#17321f;--badbg:#3b1b18;--ok:#6fd48c;--bad:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.container{max-width:680px;margin:0 auto;padding:16px}
+h1{font-size:1.5rem;margin:8px 0 4px}
+.lead{color:var(--muted);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card-body{padding:16px}
+.d-flex{display:flex}.justify-content-between{justify-content:space-between}.align-items-center{align-items:center}.gap-2{gap:8px}.mb-3{margin-bottom:12px}.mt-3{margin-top:12px}.text-center{text-align:center}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;background:var(--gold);color:#2b2500;font-size:.8rem;font-weight:600}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:14px}
+.progress-bar{height:100%;background:var(--gold);width:0;transition:width .3s}
+pre.code{background:var(--code);color:var(--codetxt);padding:14px;border-radius:10px;overflow-x:auto;font:.9rem/2.1 ui-monospace,Menlo,Consolas,monospace;margin:0 0 12px;white-space:pre}
+.form-control{font:inherit;padding:2px 8px;border:2px solid var(--gold);border-radius:6px;background:#fffbe6;color:#000;width:9ch;min-width:8ch}
+.form-control:focus{outline:none;border-color:var(--gold-d);box-shadow:0 0 0 3px rgba(212,160,23,.35)}
+.form-control.is-valid{border-color:#2e9e58;background:#e3f6e8}
+.form-control.is-invalid{border-color:#d33;background:#fde8e6}
+.btn{font:inherit;font-weight:600;padding:10px 18px;border-radius:10px;border:2px solid transparent;cursor:pointer}
+.btn-primary{background:var(--gold);color:#2b2500}.btn-primary:hover{background:var(--gold-d);color:#fff}
+.btn-outline-secondary{background:transparent;border-color:var(--line);color:var(--text)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.alert{padding:10px 14px;border-radius:10px;margin:12px 0 0;font-size:.95rem}
+.alert-success{background:var(--okbg);color:var(--ok)}.alert-danger{background:var(--badbg);color:var(--bad)}
+.hint{color:var(--muted);font-size:.9rem;margin:0 0 12px}
+.big{font-size:3rem;font-weight:800;color:var(--gold-d);margin:0}
+ul.review{list-style:none;padding:0;margin:14px 0 0;text-align:left}
+ul.review li{padding:8px 0;border-top:1px solid var(--line);font-size:.92rem}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🏆 Fill-in Quiz: 3 JavaScript Functions</h1>
+  <p class="lead">Complete the missing code from the Add / Subtract / Multiply page.</p>
+
+  <div class="card"><div class="card-body" id="app">
+    <div id="quiz">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="badge" id="counter"></span><span id="score" class="lead" style="margin:0"></span>
+      </div>
+      <div class="progress"><div class="progress-bar" id="bar"></div></div>
+      <p id="prompt" style="font-weight:600;margin:0 0 10px"></p>
+      <pre class="code" id="code"></pre>
+      <p class="hint" id="hint"></p>
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" id="check">Check</button>
+        <button class="btn btn-outline-secondary hidden" id="next">Next →</button>
+      </div>
+      <div id="feedback"></div>
+    </div>
+    <div id="result" class="hidden text-center">
+      <p class="lead" style="margin:0">Your score</p>
+      <p class="big" id="final"></p>
+      <p id="msg" style="font-weight:600"></p>
+      <ul class="review" id="review"></ul>
+      <button class="btn btn-primary mt-3" id="again">Try again</button>
+    </div>
+  </div></div>
+</div>
+
+<script>
+// Use ___ where each blank goes. answers = one accepted list per blank.
+const QUESTIONS = [
+  {p:"Which HTML attribute runs a function when a button is clicked?",
+   code:'<button type="button" ___="add()">Add</button>',
+   answers:[["onclick"]], hint:"It starts with 'on' and is all lowercase.",
+   why:"onclick calls add() when the button is clicked."},
+  {p:"Which window method shows a box that asks the user to type something?",
+   code:'let num1 = parseFloat(window.___("Enter the first number: "));',
+   answers:[["prompt"]], hint:"Not alert or confirm.",
+   why:"window.prompt() returns what the user typed, as a string."},
+  {p:"Which function turns the typed text into a decimal number?",
+   code:'let num1 = ___(window.prompt("Enter the first number: "));',
+   answers:[["parsefloat"]], hint:"parse + a type of number with decimals.",
+   why:"parseFloat() converts the string to a number so 2 + 3 gives 5, not \"23\"."},
+  {p:"Which window method displays the result to the user?",
+   code:'window.___("The sum is : " + num3);',
+   answers:[["alert"]], hint:"A pop-up with just an OK button.",
+   why:"window.alert() shows a message box."},
+  {p:"Complete the subtract function.",
+   code:'function ___(){\n  let num3 = num1 - num2;\n  window.alert("The difference is : " + num3);\n}',
+   answers:[["minus"]], hint:"Check the button's onclick in the page.",
+   why:"The Subtract button calls minus()."},
+  {p:"Fill in the operators for subtraction and multiplication.",
+   code:'num3 = num1 ___ num2;   // difference\nnum3 = num1 ___ num2;   // product',
+   answers:[["-"],["*"]], hint:"Minus sign, then asterisk.",
+   why:"- subtracts and * multiplies."},
+  {p:"Which CSS property gave the page its gold background?",
+   code:'body {\n  ___: gold;\n  font-family: Sans-Serif;\n}',
+   answers:[["background-color","background"]], hint:"Two words joined by a hyphen.",
+   why:"background-color sets the colour behind the page content."}
+];
+
+const $ = id => document.getElementById(id);
+let i = 0, score = 0, checked = false, log = [], inputs = [];
+
+function render(){
+  const q = QUESTIONS[i]; checked = false; inputs = [];
+  $("counter").textContent = "Question " + (i+1) + " / " + QUESTIONS.length;
+  $("score").textContent = "Score: " + score;
+  $("bar").style.width = (i/QUESTIONS.length*100) + "%";
+  $("prompt").textContent = q.p;
+  $("hint").textContent = "💡 " + q.hint;
+  $("feedback").innerHTML = "";
+  $("check").classList.remove("hidden"); $("check").disabled = false;
+  $("next").classList.add("hidden");
+  const pre = $("code"); pre.textContent = "";
+  q.code.split("___").forEach((part, k, arr) => {
+    pre.appendChild(document.createTextNode(part));
+    if (k < arr.length - 1){
+      const inp = document.createElement("input");
+      inp.type = "text"; inp.className = "form-control"; inp.autocomplete = "off";
+      inp.autocapitalize = "off"; inp.spellcheck = false;
+      inp.setAttribute("aria-label", "Blank " + (k+1));
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
+      pre.appendChild(inp); inputs.push(inp);
+    }
+  });
+  inputs[0].focus();
+}
+
+function check(){
+  if (checked) return;
+  const q = QUESTIONS[i];
+  if (inputs.some(x => !x.value.trim())) {
+    $("feedback").innerHTML = '<div class="alert alert-danger">Please fill in every blank.</div>'; return;
+  }
+  checked = true;
+  let allOk = true;
+  inputs.forEach((inp, k) => {
+    const ok = q.answers[k].includes(inp.value.trim().toLowerCase());
+    inp.classList.add(ok ? "is-valid" : "is-invalid"); inp.disabled = true;
+    if (!ok) allOk = false;
+  });
+  if (allOk) score++;
+  log.push({q:q.p, ok:allOk, ans:q.answers.map(a => a[0]).join(", ")});
+  const box = document.createElement("div");
+  box.className = "alert " + (allOk ? "alert-success" : "alert-danger");
+  box.textContent = (allOk ? "✅ Correct! " : "❌ Not quite. Answer: " + q.answers.map(a => a[0]).join(", ") + ". ") + q.why;
+  $("feedback").innerHTML = ""; $("feedback").appendChild(box);
+  $("score").textContent = "Score: " + score;
+  $("check").classList.add("hidden");
+  $("next").classList.remove("hidden");
+  $("next").textContent = i === QUESTIONS.length - 1 ? "See results" : "Next →";
+}
+
+function finish(){
+  $("quiz").classList.add("hidden"); $("result").classList.remove("hidden");
+  const n = QUESTIONS.length;
+  $("final").textContent = score + " / " + n;
+  $("msg").textContent = score === n ? "Perfect! 🎉" : score >= n*0.7 ? "Great job! 👏" : score >= n*0.4 ? "Good start, keep practising 💪" : "Review the code and try again 📚";
+  const ul = $("review"); ul.innerHTML = "";
+  log.forEach(l => { const li = document.createElement("li"); li.textContent = (l.ok ? "✅ " : "❌ ") + l.q + (l.ok ? "" : "  → " + l.ans); ul.appendChild(li); });
+}
+
+$("check").addEventListener("click", check);
+$("next").addEventListener("click", () => { i++; i < QUESTIONS.length ? render() : finish(); });
+$("again").addEventListener("click", () => { i = 0; score = 0; log = []; $("result").classList.add("hidden"); $("quiz").classList.remove("hidden"); render(); });
+render();
+</script>
+</body>
+</html>
